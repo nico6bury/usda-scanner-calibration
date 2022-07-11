@@ -6,16 +6,25 @@
  */
 desiredIndices = newArray(15,14,13,2,12,20,22);
 desiredIndicesCorrespondingNames = newArray("Red","Green","Blue","Tan","Gold","Gray2","Gray4");
-open("C:\\Users\\nicholas.sixbury/Desktop\\Samples\\Calibration Stuff\\2022-July-NS-ColorCalibration\\2022-June-FlourScanSettings\\V600\\ColorCheckerClassic001.tif");
+open(File.openDialog("Please select right-side-up image of color checker."));
 // set everything to do stuff in pixels
 run("Set Scale...", "distance=0 known=0 unit=pixel");
 makeBackup("calibration");
+
+// figure out size of image so we can determine sizing
+imgWidth = -1; imgHeight = -1; temp = -1;
+getDimensions(imgWidth, imgHeight, temp, temp, temp);
+// rough percent area that a single square takes up, as decimal
+singleSquarePercent = 0.025;
+totalImgArea = imgWidth * imgHeight;
+// set size limit slightly under expected square size to catch everything we want
+sizeLimit = totalImgArea * singleSquarePercent * 0.9;
 
 // do normal thresholding
 run("8-bit");
 setThreshold(60, 255);
 // get all the squares in the roi manager
-run("Analyze Particles...", "size=100000-Infinity exclude clear include add");
+run("Analyze Particles...", "size=sizeLimit-Infinity exclude clear include add");
 
 // open back original image with new rois defined
 openBackup("calibration", true);
