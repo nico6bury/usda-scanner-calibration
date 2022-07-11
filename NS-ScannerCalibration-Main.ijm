@@ -4,8 +4,8 @@
  * Purpose: To serve as the main coordinator macro for all the
  * processes required doing scanner calibration stuff.
  */
-desiredIndices = newArray(13,14,15,2,12,20,22);
-desiredIndicesCorrespondingNames = newArray("Blue","Green","Red","Tan","Gold","Gray2","Gray4");
+desiredIndices = newArray(15,14,13,2,12,20,22);
+desiredIndicesCorrespondingNames = newArray("Red","Green","Blue","Tan","Gold","Gray2","Gray4");
 open("C:\\Users\\nicholas.sixbury/Desktop\\Samples\\Calibration Stuff\\2022-July-NS-ColorCalibration\\2022-June-FlourScanSettings\\V600\\ColorCheckerClassic001.tif");
 // set everything to do stuff in pixels
 run("Set Scale...", "distance=0 known=0 unit=pixel");
@@ -63,6 +63,9 @@ roiManager("select", Array.getSequence(preCount));
 roiManager("delete");
 
 // go ahead and try to get the measurements we want
+rgbResults = "rgbResults";
+labResults = "labResults";
+hsbResults = "hsbResults";
 run("Set Measurements...", "mean standard modal min median display redirect=None decimal=2");
 // try and get RGB measurements first
 for(i = 0; i < lengthOf(desiredIndices); i++){
@@ -72,6 +75,34 @@ for(i = 0; i < lengthOf(desiredIndices); i++){
 	run("Measure Stack...");
 	close();
 }//end looping over indices to measure
+// rename results window with RGB to descriptive name
+IJ.renameResults(rgbResults);
+// try and get L*a*b* measurements next
+for(i = 0; i < lengthOf(desiredIndices); i++){
+	roiManager("select", desiredIndices[i]-1);
+	run("Duplicate...", "title=" + desiredIndicesCorrespondingNames[i]);
+	run("Lab Stack");
+	run("Measure Stack...");
+	close();
+}//end looping over indices to measure
+// rename results window with Lab to descriptive name
+IJ.renameResults(labResults);
+// try and get hsb measurements next
+for(i = 0; i < lengthOf(desiredIndices); i++){
+	roiManager("select", desiredIndices[i]-1);
+	run("Duplicate...", "title=" + desiredIndicesCorrespondingNames[i]);
+	run("HSB Stack");
+	run("Measure Stack...");
+	close();
+}//end looping over indices to measure
+// rename results window with Lab to descriptive name
+IJ.renameResults(hsbResults);
+
+// close everything down
+close("*");
+run("Close All");
+roiManager("reset");
+if(isOpen("ROI Manager")){selectWindow("ROI Manager"); run("Close");}
 
 //////////////////////////////////////////////////////////////////
 /////////////////////// END OF MAIN FUNCTION /////////////////////
@@ -91,16 +122,6 @@ function shrinkRoi(n){
 	makeRectangle(roiBounds[0],roiBounds[1],roiBounds[2],roiBounds[3]);
 	roiManager("update");
 }//end shrinkRoi(n)
-
-function getStats(){
-	area = -1;
-	mean = -1;
-	min = -1;
-	max = -1;
-	std = -1;
-	histogram = -1;
-	getStatistics(area, mean, min, max, std, histogram);
-}//end getStats()
 
 function getRoiBounds(){
 	x = -1; y = -1; w = -1; h = -1;
