@@ -4,9 +4,8 @@
  * Purpose: To serve as the main coordinator macro for all the
  * processes required doing scanner calibration stuff.
  */
-alphabet = newArray("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z");
-
-
+desiredIndices = newArray(13,14,15,2,12,20,22);
+desiredIndicesCorrespondingNames = newArray("Blue","Green","Red","Tan","Gold","Gray2","Gray4");
 open("C:\\Users\\nicholas.sixbury/Desktop\\Samples\\Calibration Stuff\\2022-July-NS-ColorCalibration\\2022-June-FlourScanSettings\\V600\\ColorCheckerClassic001.tif");
 // set everything to do stuff in pixels
 run("Set Scale...", "distance=0 known=0 unit=pixel");
@@ -55,7 +54,7 @@ for(i = 0; i < roiManager("count"); i++){
 	lastBounds = getRoiBounds();
 }//end looping over the indices to process
 
-// do a complicated sorting algorithm because easy methods didn't work
+// mess around with the roi manager in order to force it to re-sort and rename the rois
 roiManager("deselect");
 preCount = roiManager("count");
 roiManager("combine");
@@ -63,6 +62,21 @@ roiManager("split");
 roiManager("select", Array.getSequence(preCount));
 roiManager("delete");
 
+// go ahead and try to get the measurements we want
+run("Set Measurements...", "mean standard modal min median display redirect=None decimal=2");
+// try and get RGB measurements first
+for(i = 0; i < lengthOf(desiredIndices); i++){
+	roiManager("select", desiredIndices[i]-1);
+	run("Duplicate...", "title=" + desiredIndicesCorrespondingNames[i]);
+	run("RGB Stack");
+	run("Measure Stack...");
+	close();
+}//end looping over indices to measure
+
+//////////////////////////////////////////////////////////////////
+/////////////////////// END OF MAIN FUNCTION /////////////////////
+////////////////// HELPER FUNCTIONS FROM HERE ON /////////////////
+//////////////////////////////////////////////////////////////////
 
 /*
  * Subtracts n from selected roi
