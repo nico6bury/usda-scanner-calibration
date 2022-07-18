@@ -4,8 +4,8 @@
  * Purpose: To serve as the main coordinator macro for all the
  * processes required doing scanner calibration stuff.
  */
-desiredIndices = newArray(15,14,13,2,12,20,22);
-desiredIndicesCorrespondingNames = newArray("Red","Green","Blue","Tan","Gold","Gray2","Gray4");
+desiredIndices = newArray(18,19,20,21,22,23);
+desiredIndicesCorrespondingNames = newArray("Grayscale1","Grayscale2","Grayscale3","Grayscale4","Grayscale5","Grayscale6");
 open(File.openDialog("Please select right-side-up image of color checker."));
 // set everything to do stuff in pixels
 run("Set Scale...", "distance=0 known=0 unit=pixel");
