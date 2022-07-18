@@ -71,6 +71,24 @@ roiManager("split");
 roiManager("select", Array.getSequence(preCount));
 roiManager("delete");
 
+// add in the last square, the black ones
+// TODO: Make this section not hardcoded and therefore less bad
+selectBlackSquare = true;
+if(selectBlackSquare == true){
+	// get the index above the black square
+	roiManager("select", 17);
+	topBounds = getRoiBounds();
+	// get the index to the left of the black square
+	roiManager("select", 22);
+	leftBounds = getRoiBounds();
+	// create a selection from above bounds
+	makeRectangle(topBounds[0], leftBounds[1], leftBounds[2], leftBounds[3]);
+	// add this roi to the manager and name it to the right thing
+	roiManager("add");
+	// reset selection
+	makeRectangle(0,0,0,0);
+}//end if we're trying to select the black square
+
 // go ahead and try to get the measurements we want
 rgbResults = "rgbResults";
 labResults = "labResults";
