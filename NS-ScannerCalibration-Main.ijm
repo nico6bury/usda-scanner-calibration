@@ -96,7 +96,7 @@ hsbResults = "hsbResults";
 run("Set Measurements...", "mean standard modal min median display redirect=None decimal=2");
 // try and get RGB measurements first
 for(i = 0; i < lengthOf(desiredIndices); i++){
-	roiManager("select", desiredIndices[i]-1);
+	roiManager("select", desiredIndices[i]);
 	run("Duplicate...", "title=" + desiredIndicesCorrespondingNames[i]);
 	run("RGB Stack");
 	run("Measure Stack...");
@@ -106,7 +106,7 @@ for(i = 0; i < lengthOf(desiredIndices); i++){
 IJ.renameResults(rgbResults);
 // try and get L*a*b* measurements next
 for(i = 0; i < lengthOf(desiredIndices); i++){
-	roiManager("select", desiredIndices[i]-1);
+	roiManager("select", desiredIndices[i]);
 	run("Duplicate...", "title=" + desiredIndicesCorrespondingNames[i]);
 	run("Lab Stack");
 	run("Measure Stack...");
@@ -116,7 +116,7 @@ for(i = 0; i < lengthOf(desiredIndices); i++){
 IJ.renameResults(labResults);
 // try and get hsb measurements next
 for(i = 0; i < lengthOf(desiredIndices); i++){
-	roiManager("select", desiredIndices[i]-1);
+	roiManager("select", desiredIndices[i]);
 	run("Duplicate...", "title=" + desiredIndicesCorrespondingNames[i]);
 	run("HSB Stack");
 	run("Measure Stack...");
