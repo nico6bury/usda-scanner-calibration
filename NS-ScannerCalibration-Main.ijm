@@ -13,6 +13,7 @@ roiCreationPath = thisMacroDir + "NS-ColorSquareRoiCreation.ijm";
 roiSortingPath = thisMacroDir + "NS-ColorSquareRoiSorting.ijm";
 missedRoiPath = thisMacroDir + "NS-GetMissedColorSquare.ijm";
 measureColorPath = thisMacroDir + "NS-MeasureColorSpaces.ijm";
+resultsFormatPath = thisMacroDir + "NS-ResultsFormatter.ijm";
 
 // put all the color squares into the roi manager
 roiCreationParams = "";
@@ -29,6 +30,20 @@ runMacro(missedRoiPath, missedRoiParams);
 // get measurements on the different color spaces
 measureColorParams = "";
 runMacro(measureColorPath, measureColorParams);
+
+// run the results formatter
+resultsFormatParams = String.join(newArray(
+String.join(newArray("fullResultsName","fullResultsName"), "?"),
+String.join(newArray("rgbResultsName", "rgbResults"), "?"),
+String.join(newArray("labResultsName", "labResults"), "?"),
+String.join(newArray("hsbResultsName", "hsbResults"), "?"),
+String.join(newArray("scannerName", "v600"), "?"),
+String.join(newArray("disableRGB", "0"), "?"),
+String.join(newArray("disableLab", "0"), "?"),
+String.join(newArray("disableHSB", "0"), "?"),
+String.join(newArray("nColorSquares", "6"), "?")
+), "\r");
+runMacro(resultsFormatPath, resultsFormatParams);
 
 // close everything down
 close("*");
