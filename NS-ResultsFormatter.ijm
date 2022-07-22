@@ -150,7 +150,7 @@ if(!disableRGB){
 	sdevIndex = arrayIndexOf(rgbColumns, "StdDev");
 	// make sure we have the right window selected
 	selectWindow(fullResultsName);
-	for(i = 0; i < nColorSquares; i++){
+	for(i = 0; i < (nColorSquares * 3); i++){
 		// get lines from this table split up for east use
 		thisLine = split(rgbResults[i+1], "\t");
 		// add the scanner to this line
@@ -176,7 +176,7 @@ if(!disableLab){
 	sdevIndex = arrayIndexOf(labColumns, "StdDev");
 	// make sure we have the right window selected
 	selectWindow(fullResultsName);
-	for(i = 0; i < nColorSquares; i++){
+	for(i = 0; i < (nColorSquares * 3); i++){
 		// get lines from this table split up for east use
 		thisLine = split(labResults[i+1], "\t");
 		// add the scanner to this line
@@ -187,7 +187,7 @@ if(!disableLab){
 		colorSlice = slicedSquare[1];
 		// do color columns
 		Table.set("ColorSquare", ttiv, colorSquare);
-		Table.set("ColorSpace", ttiv, "RGB");
+		Table.set("ColorSpace", ttiv, "Lab");
 		Table.set("ColorSlice", ttiv, colorSlice);
 		// add normal data columns
 		Table.set("Mean", ttiv, thisLine[meanIndex]);
@@ -202,7 +202,7 @@ if(!disableHSB){
 	sdevIndex = arrayIndexOf(hsbColumns, "StdDev");
 	// make sure we have the right window selected
 	selectWindow(fullResultsName);
-	for(i = 0; i < nColorSquares; i++){
+	for(i = 0; i < (nColorSquares * 3); i++){
 		// get lines from this table split up for east use
 		thisLine = split(hsbResults[i+1], "\t");
 		// add the scanner to this line
@@ -213,7 +213,7 @@ if(!disableHSB){
 		colorSlice = slicedSquare[1];
 		// do color columns
 		Table.set("ColorSquare", ttiv, colorSquare);
-		Table.set("ColorSpace", ttiv, "RGB");
+		Table.set("ColorSpace", ttiv, "HSB");
 		Table.set("ColorSlice", ttiv, colorSlice);
 		// add normal data columns
 		Table.set("Mean", ttiv, thisLine[meanIndex]);
