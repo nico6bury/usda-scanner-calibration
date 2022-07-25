@@ -14,50 +14,21 @@ roiSortingPath = thisMacroDir + "NS-ColorSquareRoiSorting.ijm";
 missedRoiPath = thisMacroDir + "NS-GetMissedColorSquare.ijm";
 measureColorPath = thisMacroDir + "NS-MeasureColorSpaces.ijm";
 resultsFormatPath = thisMacroDir + "NS-ResultsFormatter.ijm";
-// some surprise variables that will help us later
+// some surprise variables that will help us later (in NS-MeasureColorSpaces)
 measurementsConfig = "mean standard modal min median display redirect=None decimal=2";
 desiredIndices = newArray(18,19,20,21,22,23);
 desiredIndicesCorrespondingNames = newArray("Grayscale1","Grayscale2","Grayscale3","Grayscale4","Grayscale5","Grayscale6");
 
 // put all the color squares into the roi manager
-roiCreationParams = "";
-runMacro(roiCreationPath, roiCreationParams);
-
+runRoiCreation();
 // pre-process and sort all the rois
-roiSortingParams = "";
-runMacro(roiSortingPath, roiSortingParams);
-
+runRoiSorting();
 // get that last black square that we missed earlier
-missedRoiParams = "";
-runMacro(missedRoiPath, missedRoiParams);
-
+runMissedRoi();
 // get measurements on the different color spaces
-measureColorParams = String.join(newArray(
-String.join(newArray("measurementsConfig", measurementsConfig), "?"),
-String.join(newArray("desiredIndices", String.join(desiredIndices, "\f")), "?"),
-String.join(newArray("desiredIndicesCorrespondingNames", String.join(desiredIndicesCorrespondingNames, "\f")), "?"),
-String.join(newArray("rgbResultsName", "rgbResults"), "?"),
-String.join(newArray("labResultsName", "labResults"), "?"),
-String.join(newArray("hsbResultsName", "hsbResults"), "?"),
-String.join(newArray("disableRGB", "0"), "?"),
-String.join(newArray("disableLab", "0"), "?"),
-String.join(newArray("disableHSB", "1"), "?")
-), "\r");
-runMacro(measureColorPath, measureColorParams);
-
+runMeasureColorSpaces();
 // run the results formatter
-resultsFormatParams = String.join(newArray(
-String.join(newArray("fullResultsName","fullResultsName"), "?"),
-String.join(newArray("rgbResultsName", "rgbResults"), "?"),
-String.join(newArray("labResultsName", "labResults"), "?"),
-String.join(newArray("hsbResultsName", "hsbResults"), "?"),
-String.join(newArray("scannerName", "v600"), "?"),
-String.join(newArray("disableRGB", "0"), "?"),
-String.join(newArray("disableLab", "0"), "?"),
-String.join(newArray("disableHSB", "1"), "?"),
-String.join(newArray("nColorSquares", "6"), "?")
-), "\r");
-runMacro(resultsFormatPath, resultsFormatParams);
+runResultsFormatter();
 
 // close everything down
 close("*");
@@ -67,6 +38,61 @@ if(isOpen("ROI Manager")){selectWindow("ROI Manager"); run("Close");}
 
 //////////////////////////////////////////////////////////////////
 /////////////////////// END OF MAIN FUNCTION /////////////////////
+////////////////// PARAMETER CONFIG FROM HERE ON /////////////////
+//////////////////////////////////////////////////////////////////
+
+function runRoiCreation(){
+	// sets up all parameters and runs RoiCreation macro
+	roiCreationParams = "";
+	runMacro(roiCreationPath, roiCreationParams);
+}//end runRoiCreation()
+
+function runRoiSorting(){
+	// sets up all parameters and runs RoiSorting macro
+	roiSortingParams = "";
+	runMacro(roiSortingPath, roiSortingParams);
+}//end runRoiSorting()
+
+function runMissedRoi(){
+	// sets up all parameters and runs MissedRoi macro
+	missedRoiParams = "";
+	runMacro(missedRoiPath, missedRoiParams);
+}//end of runMissedRoi()
+
+function runMeasureColorSpaces(){
+	// sets up all parameters and runs MeasureColorSpaces macro
+	measureColorParams = String.join(newArray(
+	String.join(newArray("measurementsConfig", measurementsConfig), "?"),
+	String.join(newArray("desiredIndices", String.join(desiredIndices, "\f")), "?"),
+	String.join(newArray("desiredIndicesCorrespondingNames", String.join(desiredIndicesCorrespondingNames, "\f")), "?"),
+	String.join(newArray("rgbResultsName", "rgbResults"), "?"),
+	String.join(newArray("labResultsName", "labResults"), "?"),
+	String.join(newArray("hsbResultsName", "hsbResults"), "?"),
+	String.join(newArray("disableRGB", "0"), "?"),
+	String.join(newArray("disableLab", "0"), "?"),
+	String.join(newArray("disableHSB", "1"), "?")
+	), "\r");
+	runMacro(measureColorPath, measureColorParams);
+}//end runMeasureColorSpaces()
+
+function runResultsFormatter(){
+	// sets up all parameters and runs ResultsFormatter macro
+	resultsFormatParams = String.join(newArray(
+	String.join(newArray("fullResultsName","fullResultsName"), "?"),
+	String.join(newArray("rgbResultsName", "rgbResults"), "?"),
+	String.join(newArray("labResultsName", "labResults"), "?"),
+	String.join(newArray("hsbResultsName", "hsbResults"), "?"),
+	String.join(newArray("scannerName", "v600"), "?"),
+	String.join(newArray("disableRGB", "0"), "?"),
+	String.join(newArray("disableLab", "0"), "?"),
+	String.join(newArray("disableHSB", "1"), "?"),
+	String.join(newArray("nColorSquares", "6"), "?")
+	), "\r");
+	runMacro(resultsFormatPath, resultsFormatParams);
+}//end runResultsFormatter()
+
+//////////////////////////////////////////////////////////////////
+///////////////////// END OF PARAMETER CONFIG ////////////////////
 ////////////////// HELPER FUNCTIONS FROM HERE ON /////////////////
 //////////////////////////////////////////////////////////////////
 
